@@ -1,0 +1,38 @@
+{
+  "name": "bluesky-oauth-nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "prisma:generate": "prisma generate",
+    "prisma:migration": "prisma migrate dev",
+    "prisma:migrate": "prisma db push"
+  },
+  "dependencies": {
+    "@atproto/api": "^0.13.8",
+    "@atproto/oauth-client-node": "^0.1.2",
+    "@prisma/client": "^5.20.0",
+    "iron-session": "^8.0.3",
+    "next": "14.2.13",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8",
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "prisma": "^5.20.0",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5"
+  }
+}
