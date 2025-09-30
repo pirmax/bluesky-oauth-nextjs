@@ -1,36 +1,200 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bluesky OAuth Next.js Boilerplate
+
+A modern, full-stack boilerplate for building web applications with Bluesky OAuth authentication using Next.js, Prisma, and PostgreSQL.
+
+## Features
+
+- 🔐 **Bluesky OAuth Authentication** - Secure authentication using AT Protocol OAuth
+- 🗄️ **PostgreSQL Database** - Robust database with Prisma ORM
+- 🍪 **Persistent Sessions** - Session management with iron-session
+- ⚡ **Bun Runtime** - Fast package management and development with Bun
+- 🎨 **Modern UI** - Built with Tailwind CSS and custom components
+- 🔧 **TypeScript** - Full type safety throughout the application
+- 📦 **Prisma Models** - Pre-configured models for auth states and sessions
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Runtime**: Bun
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: AT Protocol OAuth (@atproto/oauth-client-node)
+- **Session Management**: iron-session
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+- **Code Quality**: Biome (ESLint + Prettier alternative)
+
+## Prerequisites
+
+- [Bun](https://bun.sh/) installed on your machine
+- PostgreSQL database
+- Environment variables configured
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone https://github.com/pirmax/bluesky-oauth-nextjs
+cd bluesky-oauth-nextjs
+```
+
+### 2. Install dependencies
+
+```bash
+bun install
+```
+
+### 3. Set up environment variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Database
+POSTGRES_URL="postgresql://username:password@localhost:5432/your_database"
+
+# App Configuration
+NEXT_PUBLIC_URL="http://localhost:3000"
+
+# Session Security
+COOKIE_PASSWORD="your-32-characters-secret-key-here"
+```
+
+You can generate 32 caracters on [1password.com](https://1password.com/password-generator).
+
+### 4. Set up the database
+
+```bash
+# Generate Prisma client
+bunx prisma generate
+
+# Run database migrations
+bunx prisma migrate dev
+```
+
+### 5. Start the development server
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see your application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── oauth/             # OAuth authentication routes
+│   │   ├── login/         # Login page
+│   │   └── callback/      # OAuth callback handler
+│   ├── private/           # Protected pages
+│   └── client-metadata.json/ # OAuth client metadata
+├── components/            # Reusable UI components
+│   ├── bluesky-logo.tsx
+│   ├── login-button.tsx
+│   └── logout-button.tsx
+├── functions/             # Business logic
+│   └── create-user.ts     # User creation utilities
+├── lib/                   # Core utilities
+│   ├── actions.ts         # Server actions
+│   ├── atproto.ts         # AT Protocol client setup
+│   ├── iron.ts            # Session management
+│   ├── prisma.ts          # Database client
+│   └── storage.ts         # Storage implementations
+└── styles/
+    └── globals.css        # Global styles
+```
 
-## Learn More
+## Database Schema
 
-To learn more about Next.js, take a look at the following resources:
+The boilerplate includes two main Prisma models:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### AuthState
+Stores OAuth state parameters for security:
+```prisma
+model AuthState {
+  key   String @id
+  state String
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### AuthSession
+Stores OAuth session data:
+```prisma
+model AuthSession {
+  key     String @id
+  session String
+}
+```
 
-## Deploy on Vercel
+## Authentication Flow
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Login**: User clicks login button and is redirected to Bluesky OAuth
+2. **Authorization**: User authorizes the application on Bluesky
+3. **Callback**: Bluesky redirects back with authorization code
+4. **Token Exchange**: Application exchanges code for access tokens
+5. **Profile Fetch**: Application fetches user profile from Bluesky
+6. **Session Creation**: User data is stored in iron-session cookie
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Available Scripts
+
+```bash
+# Development
+bun dev              # Start development server with Turbopack
+
+# Production
+bun run build        # Build for production
+bun start           # Start production server
+
+# Code Quality
+bun run lint        # Run Biome linter
+bun run format      # Format code with Biome
+
+# Database
+bunx prisma generate    # Generate Prisma client
+bunx prisma migrate dev # Run database migrations
+bunx prisma studio     # Open Prisma Studio
+```
+
+## Environment Variables
+
+| Variable          | Description                                | Required |
+| ----------------- | ------------------------------------------ | -------- |
+| `POSTGRES_URL`    | PostgreSQL connection string               | ✅        |
+| `NEXT_PUBLIC_URL` | Your application's public URL              | ✅        |
+| `COOKIE_PASSWORD` | 32-character secret for session encryption | ✅        |
+
+## Deployment
+
+### Vercel
+
+1. Connect your repository to Vercel
+2. Add environment variables in Vercel dashboard
+3. Set up PostgreSQL database (Vercel Postgres or external)
+4. Deploy
+
+### Manual Deployment
+
+1. Build the application: `bun run build`
+2. Set up PostgreSQL database
+3. Run migrations: `bunx prisma migrate deploy`
+4. Start the server: `bun start`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature/new-feature`
+5. Open a pull request
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## Support
+
+For support and questions:
+- Open an issue on GitHub
+- Check the [AT Protocol documentation](https://atproto.com/)
+- Review the [Next.js documentation](https://nextjs.org/)

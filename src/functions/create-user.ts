@@ -1,12 +1,12 @@
-import * as AppBskyActorDefs from '@atproto/api/src/client/types/app/bsky/actor/defs'
+import type { AppBskyActorDefs } from "@atproto/api";
 
 // User type
 export type User = {
-  did: string
-  handle: string
-  name: string
-  avatar: string | null
-}
+  did: string;
+  handle: string;
+  name: string;
+  avatar: string | null;
+};
 
 // Create a user
 export function createUser(data: AppBskyActorDefs.ProfileViewDetailed): User {
@@ -15,5 +15,5 @@ export function createUser(data: AppBskyActorDefs.ProfileViewDetailed): User {
     handle: data.handle,
     name: data.displayName || data.handle,
     avatar: data.avatar || null,
-  }
+  };
 }

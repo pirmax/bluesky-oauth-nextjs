@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
-import { signInWithBluesky } from '@/lib/actions'
-import { useRouter } from 'next/navigation'
-import { FormEvent, useEffect, useState } from 'react'
+import { signInWithBluesky } from "@/lib/actions";
+import { useRouter } from "next/navigation";
+import { type FormEvent, useEffect, useState } from "react";
 
 // This is the login page
 export default function Page() {
-  const router = useRouter()
+  const router = useRouter();
 
   // This is a controlled input
-  const [handle, setHandle] = useState('')
+  const [handle, setHandle] = useState("");
 
   // Remove the @ symbol from the handle
   useEffect(() => {
-    setHandle(handle.replace('@', ''))
-  }, [handle])
+    setHandle(handle.replace("@", ""));
+  }, [handle]);
 
   // Handle the form submission
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!handle) {
-      return
+      return;
     }
 
     // Sign in with Bluesky
-    const url: string = await signInWithBluesky(handle)
+    const url: string = await signInWithBluesky(handle);
 
     // Redirect to the Bluesky login page
-    router.push(url)
-  }
+    router.push(url);
+  };
 
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -61,5 +61,5 @@ export default function Page() {
         </button>
       </form>
     </main>
-  )
+  );
 }

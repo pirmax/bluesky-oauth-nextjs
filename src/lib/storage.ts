@@ -3,8 +3,8 @@ import type {
   NodeSavedSessionStore,
   NodeSavedState,
   NodeSavedStateStore,
-} from '@atproto/oauth-client-node'
-import { PrismaClient } from '@prisma/client'
+} from "@atproto/oauth-client-node";
+import type { PrismaClient } from "@prisma/client";
 
 export class StateStore implements NodeSavedStateStore {
   constructor(private prisma: PrismaClient) {}
@@ -14,17 +14,17 @@ export class StateStore implements NodeSavedStateStore {
       where: {
         key,
       },
-    })
+    });
 
     if (!authState) {
-      return
+      return;
     }
 
-    return JSON.parse(authState.state) as NodeSavedState
+    return JSON.parse(authState.state) as NodeSavedState;
   }
 
   async set(key: string, val: NodeSavedState) {
-    const state = JSON.stringify(val)
+    const state = JSON.stringify(val);
 
     await this.prisma.authState.upsert({
       where: {
@@ -37,7 +37,7 @@ export class StateStore implements NodeSavedStateStore {
         key,
         state,
       },
-    })
+    });
   }
 
   async del(key: string) {
@@ -45,7 +45,7 @@ export class StateStore implements NodeSavedStateStore {
       where: {
         key,
       },
-    })
+    });
   }
 }
 
@@ -57,17 +57,17 @@ export class SessionStore implements NodeSavedSessionStore {
       where: {
         key,
       },
-    })
+    });
 
     if (!authSession) {
-      return
+      return;
     }
 
-    return JSON.parse(authSession.session) as NodeSavedSession
+    return JSON.parse(authSession.session) as NodeSavedSession;
   }
 
   async set(key: string, val: NodeSavedSession) {
-    const session = JSON.stringify(val)
+    const session = JSON.stringify(val);
 
     await this.prisma.authSession.upsert({
       where: {
@@ -80,7 +80,7 @@ export class SessionStore implements NodeSavedSessionStore {
         key,
         session,
       },
-    })
+    });
   }
 
   async del(key: string) {
@@ -88,6 +88,6 @@ export class SessionStore implements NodeSavedSessionStore {
       where: {
         key,
       },
-    })
+    });
   }
 }
